@@ -31,3 +31,4 @@ jobs:
           wget https://github.com/CakeML/cakeml/releases/download/v1370/cake-x64-64.tar.gz
           tar -xvzf cake-x64-64.tar.gz && cd cake-x64-64
           make
+          ls
