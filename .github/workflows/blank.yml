@@ -32,4 +32,5 @@ jobs:
           tar -xvzf cake-x64-64.tar.gz && cd cake-x64-64
           make
           cd ..
-          make CAKE_DIR=/cake-x64-64
+          pwd
+          make CAKE_DIR=./cake-x64-64
