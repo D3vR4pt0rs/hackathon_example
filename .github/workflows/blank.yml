@@ -28,6 +28,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build contract project
         run: |
-          wget https://github.com/CakeML/cakeml/releases/download/v1370/cake-x64-64.tar.gz,
-          tar -xvzf cake-x64-64.tar.gz && cd cake-x64-64,
+          wget https://github.com/CakeML/cakeml/releases/download/v1370/cake-x64-64.tar.gz
+          tar -xvzf cake-x64-64.tar.gz && cd cake-x64-64
           make
