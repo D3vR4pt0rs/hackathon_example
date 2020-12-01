@@ -22,6 +22,7 @@ jobs:
           cd ..
           
       - name: Build Contract
+        run:
           make CAKE_DIR=./cake-x64-64
   run:
     runs-on: ubuntu-latest
