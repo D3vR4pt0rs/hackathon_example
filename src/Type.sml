@@ -10,7 +10,7 @@ fun get_context_blockNum (Context _ blockNum _) = blockNum;
 fun get_context_storage (Context _ _ storage) = storage;
 
 datatype Person = Person int string;
-(*setters for Person*) 
+(*setters for Person*)
 fun set_person_addr (Person a name) value = Person value name;
 fun set_person_name (Person addr a) value = Person addr value;
 (*getters for Person*)
@@ -21,7 +21,7 @@ datatype AgreementDetails = AgreementDetails string int;
 (*setters for AgreementDetails*)
 fun set_agreementDetails_details (AgreementDetails details a ) value = AgreementDetails value a ;
 fun set_agreementDetails_bankAddress (AgreementDetails a bankAddress ) value = AgreementDetails a value ;
-(*getters for AgreementDetails*) 
+(*getters for AgreementDetails*)
 fun get_agreementDetails_details (AgreementDetails details _ ) = details;
 fun get_agreementDetails_bankAddress (AgreementDetails _ bankAddress ) = bankAddress;
 
@@ -31,7 +31,7 @@ fun set_agreement_negotiation (Agreement negotiation a b c) value = Agreement va
 fun set_agreement_customer (Agreement a customer b c) value = Agreement a value b c;
 fun set_agreement_supplier (Agreement a b supplier c) value = Agreement a b value c;
 fun set_agreement_details (Agreement a b c details) value = Agreement a b c value;
-(*getters for Agreement*) 
+(*getters for Agreement*)
 fun get_agreement_negotiation (Agreement negotiation _ _ _) = negotiation;
 fun get_agreement_customer (Agreement _ customer _ _) = customer;
 fun get_agreement_supplier (Agreement _ _ supplier _) = supplier;
@@ -46,8 +46,9 @@ fun set_priceChange_startTime (PriceChange a b startTime) value = PriceChange a 
 fun get_priceChange_price (PriceChange price _ _) = price;
 fun get_priceChange_negotiation (PriceChange _ negotiation _) = negotiation;
 fun get_priceChange_startTime (PriceChange _ _ startTime) = startTime;
+
 datatype PaymentOrder = PaymentOrder int int int int PaymentStatus bool;
-(*setters for PaymentOrder*) 
+(*setters for PaymentOrder*)
 fun set_PaymentOrder_amount (PaymentOrder amount a b c d e) value = PaymentOrder value a b c d e;
 fun set_PaymentOrder_paymentTime (PaymentOrder a paymentTime b c d e) value = PaymentOrder a value b c d e;
 fun set_PaymentOrder_paymentId (PaymentOrder a b paymentId c d e) value = PaymentOrder a b value c d e;
@@ -94,7 +95,7 @@ fun get_task_paymentTime (Task _ _ _ _ _ _ _ _ _ _ _ paymentTime _ _ ) = payment
 fun get_task_taskStatus (Task _ _ _ _ _ _ _ _ _ _ _ _ taskStatus _ ) = taskStatus;
 fun get_task_paymentType (Task _ _ _ _ _ _ _ _ _ _ _ _ _ paymentType ) = paymentType;
 
-datatype Campaign = Campaign Agreement (Task list) Negotiation (PriceChange list) Phase int (PaymentOrder list); 
+datatype Campaign = Campaign Agreement (Task list) Negotiation (PriceChange list) Phase int (PaymentOrder list);
 (*setters for Campaign*)
 fun set_campaign_agreement (Campaign agreement a b c d e f) value = Campaign value a b c d e f;
 fun set_campaign_tasks (Campaign a tasks b c d e f) value = Campaign a value b c d e f;

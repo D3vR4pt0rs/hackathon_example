@@ -1,10 +1,10 @@
-structure RuntimePrivate = 
+structure RuntimePrivate =
 struct
     (* int -> (Word8.word list) -> (SCValue list) -> (SCValue OptionErr)*)
-    fun execute f context params campaign = 
-        case f of 
+    fun execute f context params campaign =
+        case f of
         2 => Contract.getAgreement context params campaign
-        | 3 => Contract.rejectAgreement context params campaign
+        | 3 => Contract.rejectAgreement context params campaign (* *)
         | 4 => Contract.approveAgreement context params campaign
         | 5 => Contract.changeAgreementDetails context params campaign
         | 6 => Contract.getPriceChangeWithNumber context params campaign
@@ -28,31 +28,31 @@ struct
         | n => NONE "The function doesn't exist";
 end;
 
-structure Runtime = 
+structure Runtime =
 struct
     fun call f context params =
-    let        
+    let
         val storage = (get_context_storage context);
 
         (*(Word8Word list) -> Campaign option*)
-        fun deserialize storage = 
-            if storage = [] then 
+        fun deserialize storage =
+            if storage = [] then
                 None
-            else 
+            else
                 scValue_to_campaign (decodeValue storage);
-        
+
         val campaign = deserialize storage;
 
-        val optionCampaign = 
+        val optionCampaign =
             if Option.isSome campaign then
                 if f <> 1 then
                     (RuntimePrivate.execute f context params (Option.valOf campaign))
-                else 
+                else
                     NONE "Storage is not empty"
-            else if f = 1 then 
+            else if f = 1 then
                 Contract.constructor context params
             else
-                NONE "Error deserializtion";        
+                NONE "Error deserialization";
     in
         if Option.isNone (get_err optionCampaign) then
             if Option.isSome (get optionCampaign) then
