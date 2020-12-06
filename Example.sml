@@ -61,10 +61,10 @@ fun main () =
 					else
 							print(Option.valOf(get_err (result_getting_agreement))) *)
 
-					if Option.isNone (get_err result_decline_pricechange) then
-	             print(campaign_toPrettyString ((Option.valOf( scValue_to_campaign( decodeValue(Option.valOf(get ( result_decline_pricechange ))))))))
+					if Option.isNone (get_err result_create_pricechange) then
+	             print(campaign_toPrettyString ((Option.valOf( scValue_to_campaign( decodeValue(Option.valOf(get ( result_create_pricechange ))))))))
 	         else
-	             print(Option.valOf(get_err ( result_decline_pricechange )))
+	             print(Option.valOf(get_err ( result_create_pricechange )))
 
 					 (* if Option.isNone (get_err result_get_pricechange) then
 						   print(priceChange_toPrettyString ((Option.valOf( scValue_to_PriceChange ( decodeValue(Option.valOf(get_ret_val (result_get_pricechange ))))))))
