@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [ feature/ci, dev, master ]
+  pull_request:
+    branches: [ master, dev ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build CakeML
+        run: |
+          wget https://github.com/CakeML/cakeml/releases/download/v1370/cake-x64-64.tar.gz
+          tar -xvzf cake-x64-64.tar.gz && cd cake-x64-64
+          make
+          cd ..
+          
+      - name: Build Contract
+        run:
+          make CAKE_DIR=./cake-x64-64
+      - name: Run contract
+        run:
+           ./contract
