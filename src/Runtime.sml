@@ -4,7 +4,7 @@ struct
     fun execute f context params campaign =
         case f of
         2 => Contract.getAgreement context params campaign
-        | 3 => Contract.rejectAgreement context params campaign (* *)
+        | 3 => Contract.rejectAgreement context params campaign
         | 4 => Contract.approveAgreement context params campaign
         | 5 => Contract.changeAgreementDetails context params campaign
         | 6 => Contract.getPriceChangeWithNumber context params campaign
