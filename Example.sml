@@ -1,3 +1,68 @@
+structure SupplierActions =
+struct
+	fun make_action f addr blockNum campaign params =
+	case f of
+	1 => Runtime.call 2 (Context addr blockNum (Option.valOf(get (campaign)))) []
+	| 2 => Runtime.call 3 (Context addr blockNum (Option.valOf(get (campaign)))) []
+	| 3 => Runtime.call 4 (Context addr blockNum (Option.valOf(get (campaign)))) []
+	| 4 => Runtime.call 11 (Context addr blockNum (Option.valOf(get (campaign)))) params
+	| 5 => Runtime.call 12 (Context addr blockNum (Option.valOf(get (campaign)))) params
+	| 6 => Runtime.call 13 (Context addr blockNum (Option.valOf(get (campaign)))) params
+	| 7 => Runtime.call 14 (Context addr blockNum (Option.valOf(get (campaign)))) params
+	| 8 => Runtime.call 15 (Context addr blockNum (Option.valOf(get (campaign)))) params
+end
+
+structure CustomerActions =
+struct
+	fun make_action f addr blockNum campaign params =
+	case f of
+	1 => Runtime.call 2 (Context addr blockNum (Option.valOf(get (campaign)))) []
+	| 2 => Runtime.call 5 (Context addr blockNum (Option.valOf(get (campaign)))) params
+	| 3 => Runtime.call 6 (Context addr blockNum (Option.valOf(get (campaign)))) []
+	| 4 => Runtime.call 7 (Context addr blockNum (Option.valOf(get (campaign)))) []
+	| 5 => Runtime.call 8 (Context addr blockNum (Option.valOf(get (campaign)))) []
+	| 6 => Runtime.call 9 (Context addr blockNum (Option.valOf(get (campaign)))) []
+	| 7 => Runtime.call 10 (Context addr blockNum (Option.valOf(get (campaign)))) []
+	| 8 => Runtime.call 12 (Context addr blockNum (Option.valOf(get (campaign)))) params
+	| 9 => Runtime.call 16 (Context addr blockNum (Option.valOf(get (campaign)))) params
+	| 10 => Runtime.call 17 (Context addr blockNum (Option.valOf(get (campaign)))) params
+end
+
+structure WorkerActions =
+struct
+	fun make_action f addr blockNum campaign params =
+	case f of
+	1 => Runtime.call 18 (Context addr blockNum (Option.valOf(get (campaign)))) params
+	| 2 => Runtime.call 21 (Context addr blockNum (Option.valOf(get (campaign)))) params
+	| 3 => Runtime.call 22 (Context addr blockNum (Option.valOf(get (campaign)))) params
+end
+
+structure CaptainActions =
+struct
+	fun make_action f addr blockNum campaign params =
+	case f of
+	1 => Runtime.call 19 (Context addr blockNum (Option.valOf(get (campaign)))) params
+	| 2 => Runtime.call 23 (Context addr blockNum (Option.valOf(get (campaign)))) params
+end
+
+structure BankActions =
+struct
+	fun make_action f addr blockNum campaign params =
+	case f of
+	1 => Runtime.call 20 (Context addr blockNum (Option.valOf(get (campaign)))) params
+end
+
+structure Role =
+struct
+	fun choose_role f addr blockNum action params campaign =
+	case f of
+	1 => CustomerActions.make_action action  addr blockNum  params campaign
+	| 2 => SupplierActions.make_action action addr blockNum  params campaign
+	| 3 => WorkerActions.make_action action addr blockNum  params campaign
+	| 4 => CaptainActions.make_action action addr blockNum  params campaign
+	| 5 => BankActions.make_action action addr blockNum  params campaign
+end
+
 fun main () =
 				(* Init contract *)
 				let
@@ -6,65 +71,21 @@ fun main () =
         	val init_params = [ SCInt 1337, SCString "aviacompany", SCInt 1338, SCString "fuelcompany", SCString "This very simple agreement", SCInt 1339 ];
         	val result_init = Runtime.call 1 customer init_params;
 
-				(* Get Agreement *)
-					val supplier = Context 1338 10218 (Option.valOf(get (result_init)));
-					val result_getting_agreement = Runtime.call 2 supplier [];
+					val result_getting_agreement = Role.choose_role 1 1337 10218 1 result_init [];
 
-				(* Reject Agreement *)
-					val supplier = Context 1338 10219 (Option.valOf(get (result_init)));
-					val result_reject_agreement = Runtime.call 3 supplier [];
-
-				(* Change Details of Agreement *)
-					val customer = Context 1337 10220 (Option.valOf(get (result_reject_agreement)));
-					val change_agreement_params = [SCString "Solve diffur", SCInt 1222];
-					val result_change_agreement = Runtime.call 5 customer change_agreement_params;
-
-				(* Approve Agreement *)
-					val supplier = Context 1338 10221 (Option.valOf(get (result_change_agreement)));
-					val result_approve_agreement = Runtime.call 4 supplier [];
-
-				(* Create Price Change *)
-					val supplier = Context 1338 10222 (Option.valOf(get (result_approve_agreement)));
-					val pricechange_params = [SCInt 10000 , SCNegotiation WaitingCustomer,SCInt 60 ];
-					val result_create_pricechange = Runtime.call 11 supplier pricechange_params;
-
-				(* Get Price Change *)
-					val customer = Context 1337 10223 (Option.valOf(get (result_create_pricechange)));
-					val result_get_pricechange = Runtime.call 6 customer [SCInt 0];
-
-				(* Get Number of PriceChanges *)
-					val customer = Context 1337 10224 (Option.valOf(get (result_create_pricechange)));
-					val result_get_number_price_change = Runtime.call 7 customer [];
-
-				(* Reject PriceChange *)
-					val customer = Context 1337 10225 (Option.valOf(get (result_create_pricechange)));
-					val result_reject_price_change = Runtime.call 8 customer [];
-
-				(* Create Price Change *)
-				val supplier = Context 1338 10226 (Option.valOf(get (result_reject_price_change)));
-				val pricechange_params = [SCInt 1000 , SCNegotiation WaitingCustomer,SCInt 60 ];
-				val result_create_pricechange = Runtime.call 11 supplier pricechange_params;
-
-				(* Decline Price Change
-				val customer = Context 1337 10227 (Option.valOf(get (result_create_pricechange)));
-				val result_decline_pricechange = Runtime.call 10 customer pricechange_params; *)
-
-				(* Approve Price Change *)
-				val customer = Context 1337 10225 (Option.valOf(get (result_create_pricechange)));
-				val result_approve_price_change = Runtime.call 9 customer [];
 
 				(* Add Task *)
 
 				in
-					(* if Option.isNone (get_err result_getting_agreement) then
+					 if Option.isNone (get_err result_getting_agreement) then
 							print(agreement_toPrettyString ((Option.valOf( scValue_to_Agreement( decodeValue(Option.valOf(get_ret_val ( result_getting_agreement ))))))))
 					else
-							print(Option.valOf(get_err (result_getting_agreement))) *)
+							print(Option.valOf(get_err (result_getting_agreement)))
 
-					if Option.isNone (get_err result_create_pricechange) then
+					(* if Option.isNone (get_err result_create_pricechange) then
 	             print(campaign_toPrettyString ((Option.valOf( scValue_to_campaign( decodeValue(Option.valOf(get ( result_create_pricechange ))))))))
 	         else
-	             print(Option.valOf(get_err ( result_create_pricechange )))
+	             print(Option.valOf(get_err ( result_create_pricechange ))) *)
 
 					 (* if Option.isNone (get_err result_get_pricechange) then
 						   print(priceChange_toPrettyString ((Option.valOf( scValue_to_PriceChange ( decodeValue(Option.valOf(get_ret_val (result_get_pricechange ))))))))
