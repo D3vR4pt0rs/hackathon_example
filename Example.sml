@@ -163,7 +163,7 @@ fun main () =
 					val result_capitan_confirm_task = Role.choose_role 4 1340 10234 2 result_worker_task_complete [SCInt 228];
 					val _ = print(reformat_campaign_to_string result_capitan_confirm_task);
 
-					val result_payment_completed = Role.choose_role 5 1339 10235 1 result_capitan_confirm_task [SCInt 1];
+					val result_payment_completed = Role.choose_role 5 1339 10235 1 result_capitan_confirm_task [SCInt 0];
 
 
 				in
