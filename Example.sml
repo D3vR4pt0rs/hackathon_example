@@ -134,7 +134,7 @@ fun main () =
 					SCInt 1341, SCString "Oily",
 					SCInt 1000, SCInt 1000, SCInt 1000, SCInt 1000,
 					SCInt 1, SCInt 10, SCInt 11, SCInt 5,
-					SCTaskStatus TaskNotAccepted, SCPaymentType Pre]; (*TODO list*)
+					SCTaskStatus TaskNotAccepted, SCPaymentType Post]; (*TODO list*)
 					val result_task_add = Role.choose_role 1 1337 10226 10 result_approve_price_change addtaskparams;
 					val _ = print(reformat_campaign_to_string result_task_add);
 					val result_getting_tasks_by_sup = Role.choose_role 2 1338 10227 5 result_task_add [SCInt 228];
