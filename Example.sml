@@ -85,17 +85,6 @@ fun reformat_task_to_string value = task_toPrettyString ((Option.valOf( scValue_
 
 fun main () =
 				(* Init contract *)
-				(*
-				5 ролей - Customer, Supplier, Worker, Captain, Bank
-				 Customer - авиакомпания
-				 Supplier - топливня компнаия
-				 Worker - работник Supplier
-				 Captain - работник Customer
-				 Bank - банк, логично
-
-				Ещё полезные вещи
-				campaign - состояние контракта
-				*)
 				let
         	val storage = [];
         	val customer = Context 1337 10217 storage;
@@ -103,67 +92,86 @@ fun main () =
         	val result_init = Runtime.call 1 customer init_params; (*передаем campaign*)
 
 					val result_getting_agreement_by_cus = Role.choose_role 1 1337 10218 1 result_init [];
-					(* val _ = print ( reformat_agreement_to_string result_getting_agreement_by_cus) *)
+					val _ = print("Get Agreement by Customer:");
+					val _ = print ( reformat_agreement_to_string result_getting_agreement_by_cus)
 
 					val result_getting_agreement_by_sup = Role.choose_role 2 1338 10219 1 result_init [];
-					(* val _ = print ( reformat_agreement_to_string result_getting_agreement_by_sup) *)
+					val _ = print("Get Agreement by Supplier:");
+					val _ = print ( reformat_agreement_to_string result_getting_agreement_by_sup)
+
 
 					val result_reject_agreement = Role.choose_role 2 1338 10220 2 result_init [];
-					(* val _ = print (reformat_campaign_to_string result_reject_agreement) *)
+					val _ = print("Reject Agreement:");
+					val _ = print (reformat_campaign_to_string result_reject_agreement)
 
 					val result_change_agreement_details = Role.choose_role 1 1337 10221 2 result_reject_agreement [SCString "Buy all hamburgers", SCInt 1339];
-					(* val _ = print (reformat_campaign_to_string result_change_agreement_details) *)
+					val _ = print("Change Agreement Details:");
+					val _ = print (reformat_campaign_to_string result_change_agreement_details)
 
 					val result_approve_agreement = Role.choose_role 2 1338 10222 3 result_change_agreement_details [];
-				(*	val _ = print (reformat_campaign_to_string result_approve_agreement) *)
+					val _ = print("Approve Agreement:");
+					val _ = print (reformat_campaign_to_string result_approve_agreement)
 
-
-					(* срач из-за цены *)
 					val price_params = [SCInt 228, SCNegotiation WaitingCustomer, SCInt 666]
 					val result_create_price_change = Role.choose_role 2 1338 10223 4 result_approve_agreement price_params;
-					(* val _ = print (reformat_campaign_to_string result_create_price_change); *)
+					val _ = print("Creating Price Change:");
+					val _ = print (reformat_campaign_to_string result_create_price_change);
+
 					val result_get_price_changes_length = Role.choose_role 1 1337 10224 4 result_create_price_change [];
 					(* val result_reject_price_change = Role.choose_role 1 1337 10225 5 result_create_price_change []; *)
+
 					val result_approve_price_change = Role.choose_role 1 1337 10225 6 result_create_price_change [];
-				(*	val _ = print (reformat_campaign_to_string result_approve_price_change); *)
+					val _ = print("Approve Price Change:");
+					val _ = print (reformat_campaign_to_string result_approve_price_change);
 					(* val result_decline_price_change = Role.choose_role 1 1337 10225 7 result_create_price_change []; *)
 
 					(* Add Task *)
-					val addtaskparams = [SCInt 228, SCNegotiation WaitingSupplier,
+					val add_task_params = [SCInt 228, SCNegotiation WaitingSupplier,
 					SCInt 1340, SCString "Aero",
 					SCInt 1341, SCString "Oily",
 					SCInt 1000, SCInt 1000, SCInt 1000, SCInt 1000,
 					SCInt 1, SCInt 10, SCInt 11, SCInt 5,
-					SCTaskStatus TaskNotAccepted, SCPaymentType Delayed]; (*TODO list*)
-					val result_task_add = Role.choose_role 1 1337 10226 10 result_approve_price_change addtaskparams;
+					SCTaskStatus TaskNotAccepted, SCPaymentType Delayed];
+					val result_task_add = Role.choose_role 1 1337 10226 10 result_approve_price_change add_task_params;
+					val _ = print("Adding Task:");
 					val _ = print(reformat_campaign_to_string result_task_add);
+
 					val result_getting_tasks_by_sup = Role.choose_role 2 1338 10227 5 result_task_add [SCInt 228];
+					val _ = print("Getting Task by Supplier:");
 					val _ = print(reformat_task_to_string result_getting_tasks_by_sup);
+
 					val result_approve_task = Role.choose_role 2 1338 10228 6 result_task_add [SCInt 228];
+					val _ = print("Approve Task:");
 					val _ = print(reformat_campaign_to_string result_approve_task);
 					(* val result_reject_task = Role.choose_role 2 1338 10228 result_getting_tasks_by_sup 228;*)
 
-					(*БЛОК 2. Sup и Cus уходят бухать*)
+					(*БЛОК 2*)
 
 					val result_worker_accept_task = Role.choose_role 3 1341 10229 2 result_approve_task [SCInt 228];
+					val _ = print("Accept Task from Worker:");
 					val _ = print(reformat_campaign_to_string result_worker_accept_task);
 
 					val result_worker_ready_to_perform_task = Role.choose_role 3 1341 10230 1 result_worker_accept_task [SCInt 228];
+					val _ = print("Worker Ready to Perform Task:");
 					val _ = print(reformat_campaign_to_string result_worker_ready_to_perform_task);
 
 					val result_capitan_request_gas = Role.choose_role 4 1340 10231 1 result_worker_ready_to_perform_task [SCInt 228, SCInt 1000, SCInt 5];
+					val _ = print("Capitan Request Gas:");
 					val _ = print(reformat_campaign_to_string result_capitan_request_gas);
 
 					val result_worker_perform_task = Role.choose_role 3 1341 10232 3 result_capitan_request_gas [SCInt 228];
+					val _ = print("Perform Task by Worker:");
 					val _ = print(reformat_campaign_to_string result_worker_perform_task);
 
 					val result_worker_task_complete = Role.choose_role 3 1341 10233 4 result_worker_perform_task [SCInt 228, SCInt 1000];
+					val _ = print("Worker Task Complete:");
 					val _ = print(reformat_campaign_to_string result_worker_task_complete);
 
 					val result_capitan_confirm_task = Role.choose_role 4 1340 10234 2 result_worker_task_complete [SCInt 228];
+					val _ = print("Confirm Task by Captain:");
 					val _ = print(reformat_campaign_to_string result_capitan_confirm_task);
 
-					val result_payment_completed = Role.choose_role 5 1339 10235 1 result_capitan_confirm_task [SCInt 0];
+					val result_payment_completed = Role.choose_role 5 1339 10235 1 result_capitan_confirm_task [SCInt 1];
 
 
 				in
